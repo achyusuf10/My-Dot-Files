@@ -1,0 +1,109 @@
+local hotkeys_popup = require("awful.hotkeys_popup.widget")
+
+local nvim = {}
+
+--- Add rules to match nvim session.
+--
+-- For example:
+--
+--     nvim.add_rules_for_terminal({ rule = { name = { "nvim" }}})
+--
+-- will show nvim hotkeys for any window that has 'nvim' in its title.
+-- If no rules are provided then nvim hotkeys will be shown always!
+-- @function add_rules_for_terminal
+-- @see ruled.client.rules
+-- @tparam table rule Rules to match a window containing a nvim session.
+function nvim.add_rules_for_terminal(rule)
+    for group_name, group_data in pairs({
+        ["nvim: Cursor Movement"] = rule,
+        ["nvim: Cut and Paste"]  = rule,
+        ["nvim: Insert Mode"]    = rule,
+        ["nvim: Editing"]     = rule,
+    }) do
+        hotkeys_popup.add_group_rules(group_name, group_data)
+    end
+end
+
+local nvim_keys = {
+    ["nvim: Cursor Movement"] = {
+    {
+        modifiers = {},
+        keys = {
+            h     = "move cursor left",
+            j     = "move cursor down",
+            k     = "move cursor up",
+            l     = "move cursor right",
+            gg    = "go to the first line of the document",
+        }
+    },
+    {
+        modifiers = {"Shift"},
+        keys = {
+            h     = "move to top of screen",
+            m     = "move to middle of screen",
+            l     = "move to bottom of screen",
+            g    = "go to the last line of the document",
+        }
+    }
+},
+
+["nvim: Cut and Paste"] = {
+    {
+        modifiers = {},
+        keys = {
+            yy    = "copy a line",
+            x     = "delete (cut) character",
+            y     = "yank (copy) marked text",
+            d     = "delete marked text",
+            p     = "paste the clipboard after cursor",
+            dd    = "delete (cut) a line",
+        }
+    },
+    {
+        modifiers = {"Shift"},
+        keys = {
+            p     = "paste before cursor",
+            d     = "delete (cut) to the end of the line",
+        }
+    }
+},
+
+["nvim: Insert Mode"] = {
+    {
+        modifiers = {},
+        keys = {
+            i     = "insert before the cursor",
+            a     = "insert (append) after the cursor",
+        }
+    },
+    {
+        modifiers = {"Shift"},
+        keys = {
+            i     = "insert at the beginning of the line",
+            a     = "insert (append) at the end of the line",
+        }
+    }
+},
+
+["nvim: Editing"] = {
+    {
+        modifiers = {},
+        keys = {
+            r     = "replace a single character",
+            u     = "undo",
+            cc     = "change (replace) entire line",
+        }
+    },
+    {
+        modifiers = {"Control"},
+        keys = {
+            r     = "redo",
+        }
+    }
+},
+    
+}
+
+hotkeys_popup.add_hotkeys(nvim_keys)
+
+return nvim
